@@ -1,0 +1,15 @@
+﻿# Environment variables and sensitive data
+.env
+data/
+puffer-data/database.db
+
+# Server data
+*.log
+logs/
+crash-reports/
+world/
+plugins/
+
+# OS-specific files
+.DS_Store
+Thumbs.db

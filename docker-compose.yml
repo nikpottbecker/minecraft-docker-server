@@ -1,0 +1,47 @@
+﻿version: '3.8'
+
+services:
+  minecraft:
+    image: itzg/minecraft-server
+    container_name: minecraft
+    ports:
+      - "25565:25565"
+    environment:
+      EULA: "TRUE"
+      MEMORY: "2G"
+      TYPE: "PAPER"
+      ENABLE_RCON: "true"
+      RCON_PASSWORD: ""
+      OVERRIDE_SERVER_PROPERTIES: "true"
+      ENABLE_COMMAND_BLOCK: "true"
+      ENABLE_QUERY: "true"
+      QUERY_PORT: "25565"
+    volumes:
+      - ./data:/data
+    restart: unless-stopped
+    tty: true
+    stdin_open: true
+    networks:
+      - minecraft_network
+
+  pufferpanel:
+    image: pufferpanel/pufferpanel
+    container_name: pufferpanel
+    ports:
+      - "8080:8080"
+      - "5657:5657"
+    volumes:
+      - ./puffer-data:/etc/pufferpanel
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      PUFFERPANEL_SECURE: "true"
+      PUFFERPANEL_ALLOWREGISTRATION: "false"
+    restart: unless-stopped
+    networks:
+      - minecraft_network
+    depends_on:
+      - minecraft
+
+networks:
+  minecraft_network:
+    driver: bridge
